@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CourseWorkOTS.BlocksDS
+namespace CourseWorkBCT.BlocksDS
 {
     // 
     // Класс описывающий блок "Источник сообщения" в CПДС.  
@@ -16,7 +16,7 @@ namespace CourseWorkOTS.BlocksDS
         private List<string> message = new List<string>();
         private double[] parameterMessageSource = new double[5];
 
-        private Dictionary<string, double> probalitiesSymbol;
+        public Dictionary<string, double> probalitiesSymbol{ get; private set; }
 
         public MessageSource(int [] variable)
         {
@@ -30,32 +30,7 @@ namespace CourseWorkOTS.BlocksDS
             this.probalitiesSymbol = probalitiesSymbol;
             StartBlock();
         }
-
-        public double Pi(double H, double HMax)
-        {
-            return 1 - (H / HMax);
-        }
-
-        public double HHatch(double Vi, double H)
-        {
-            return Vi * H;
-        }
-
-        public List<string> GenerationgMessage(List<string> listSymbol, int lenghtMessage)
-        {
-            List<string> messageLocal = new List<string>();
-            for (int i = 0; i < lenghtMessage; i++)
-            {
-                messageLocal.Add(listSymbol[new Random().Next(listSymbol.Count)]);
-            }
-            return messageLocal;
-        }
-        
-        public Dictionary<string, double> getProbalitiesSymbol()
-        {
-            return probalitiesSymbol;
-        }
-
+        //
         // Метод вычисления вероятностей появления символов.
         private void CreatingProbalityTable()
         {
@@ -88,7 +63,6 @@ namespace CourseWorkOTS.BlocksDS
 
         // 
         // Далее следуют методы вычисления каждого из параметров источника сообщения.
-        //
         private double Vi()
         {
             double vi = 0;
@@ -123,7 +97,8 @@ namespace CourseWorkOTS.BlocksDS
         {
             return parameterMessageSource[0] * parameterMessageSource[1];
         }
-
+        //
+        // Следующий метод генерирует сообщение из 10-ти случайно выбранных допустимых символов.
         private List<string> GenerationgMessage()
         {
             List<string> messageLocal = new List<string>();

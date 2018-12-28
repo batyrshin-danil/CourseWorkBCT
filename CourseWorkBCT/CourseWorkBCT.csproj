@@ -44,8 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlocksDS\CodeHaffman.cs" />
+    <Compile Include="BlocksDS\CodeShennonaFano.cs" />
     <Compile Include="BlocksDS\MessageSource.cs" />
     <Compile Include="BlocksDS\SourceCoder.cs" />
+    <Compile Include="ElementsTree\Leaf.cs" />
+    <Compile Include="ElementsTree\Node.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
