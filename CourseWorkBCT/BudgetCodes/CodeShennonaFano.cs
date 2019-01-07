@@ -5,32 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using CourseWorkBCT.ElementsTree;
 
-namespace CourseWorkBCT.BlocksDS
+namespace CourseWorkBCT.BudgetCodes
 {
-    class CodeShennonaFano
+    public class CodeShennonaFano
     {
         private List<Node> leafShennonaFanoTree = new List<Node>();
         private Node rootTreeShennonaFano;
         //
         // Словарь для хранения пар "символ:код".
-        private Dictionary<string, string> tableCodes;
+        public Dictionary<string, string> tableCodes { get; private set; }
 
-        public CodeShennonaFano(Dictionary<string, double> probalitiesSymbol)
+        public CodeShennonaFano(Dictionary<string, double> probSymbol)
         {
-            CreatingListLeaf(probalitiesSymbol);
-        }
-
-        public Dictionary<string, string> getTableCodes()
-        {
-            return tableCodes;
+            CreatingListLeaf(probSymbol);
         }
         //
         // Создаем список листьев кодового дерева Хаффмана и сортируем его по возрастания слева-направо.
-        private void CreatingListLeaf(Dictionary<string, double> probalitiesSymbol)
+        private void CreatingListLeaf(Dictionary<string, double> probSymbol)
         {
-            foreach (string key in probalitiesSymbol.Keys)
+            foreach (string key in probSymbol.Keys)
             {
-                leafShennonaFanoTree.Add(new Leaf(key, probalitiesSymbol[key]));
+                leafShennonaFanoTree.Add(new Leaf(key, probSymbol[key]));
             }
             //
             // Сортировка списка листьев по возрастанию.
@@ -40,30 +35,7 @@ namespace CourseWorkBCT.BlocksDS
         // Метод создания кодового дерева Шеннона-Фано.
         private Dictionary<string, string> CreatingTreeShennonaFano()
         {
-            while (true)
-            {
-                List<Node>[] twoHalvesListLeaf = DivisionLeafList(leafShennonaFanoTree);
-
-                var left = leafShennonaFanoTree[0];
-                var right = leafShennonaFanoTree[1];
-                leafShennonaFanoTree.RemoveAt(1);
-                leafShennonaFanoTree.RemoveAt(0);
-
-                double Pi = left.getPi() + right.getPi();
-                string Name = Convert.ToString(Pi);
-
-                leafShennonaFanoTree.Add(new Node(Name, Pi, left, right));
-
-                leafShennonaFanoTree = SortingLeafList(leafShennonaFanoTree);
-            }
-
-            rootTreeShennonaFano = (Node)leafShennonaFanoTree[0];
-            leafShennonaFanoTree = null;
-            Dictionary<string, string> tableCodes = new Dictionary<string, string>();
-
-            rootTreeShennonaFano.searchSymbol(tableCodes, "");
-
-            return tableCodes;
+            return null;
         }
         //
         // Метод деления списка листьев на две примерно равные половины.

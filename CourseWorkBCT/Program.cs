@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CourseWorkBCT.BlocksDS;
+using CourseWorkBCT.BudgetCodes;
 
 namespace CourseWorkOTS
 {
@@ -12,14 +13,17 @@ namespace CourseWorkOTS
         static void Main(string[] args)
         {
             MessageSource messageSource = new MessageSource(new int[4] { 6, 3, 0, 5 });
-            CodeHaffman codeHaffman = new CodeHaffman(messageSource.probalitiesSymbol);
+            SourceCoder sourceCoder = new SourceCoder(messageSource);
 
-            foreach (string key in codeHaffman.getTableCodes().Keys)
+            foreach(string symbol in messageSource.Message)
             {
-                Console.WriteLine(key + " : " + codeHaffman.getTableCodes()[key]);
+                Console.WriteLine(symbol);
             }
 
-            CodeShennonaFano codeShennonaFano = new CodeShennonaFano(messageSource.probalitiesSymbol);
+            int a = 3;
+
+            Console.WriteLine(Convert.ToString(a, 2));
+            Console.WriteLine(Convert.ToString(a, 16));
 
             Console.ReadLine();
         }

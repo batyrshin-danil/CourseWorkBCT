@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CourseWorkBCT.ElementsTree;
 
-namespace CourseWorkBCT.BlocksDS
+namespace CourseWorkBCT.BudgetCodes
 {
     class CodeHaffman
     {
@@ -13,25 +13,20 @@ namespace CourseWorkBCT.BlocksDS
         private Node rootTreeHaffman;
         //
         // Словарь для хранения пар "символ:код".
-        private Dictionary<string, string> tableCodes;
+        public Dictionary<string, string> tableCodes { get; private set; }
 
-        public CodeHaffman(Dictionary<string, double> probalitiesSymbol)
+        public CodeHaffman(Dictionary<string, double> probSymbol)
         {
-            CreatingListLeaf(probalitiesSymbol);
+            CreatingListLeaf(probSymbol);
             tableCodes = CreatingTreeHaffman();
-        }
-
-        public Dictionary<string, string> getTableCodes()
-        {
-            return tableCodes;
         }
         //
         // Создаем список листьев кодового дерева Хаффмана и сортируем его по возрастания слева-направо.
-        private void CreatingListLeaf(Dictionary<string,double> probalitiesSymbol)
+        private void CreatingListLeaf(Dictionary<string,double> probSymbol)
         {
-            foreach(string key in probalitiesSymbol.Keys)
+            foreach(string key in probSymbol.Keys)
             {
-                leafHaffmanTree.Add(new Leaf(key, probalitiesSymbol[key]));
+                leafHaffmanTree.Add(new Leaf(key, probSymbol[key]));
             }
             // Сортировка списка листьев по возрастанию.
             leafHaffmanTree = SortingLeafList(leafHaffmanTree);
