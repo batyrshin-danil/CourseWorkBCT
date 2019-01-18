@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace CursWorkBCTGraphicUserInterface
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для Button.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Button : UserControl
     {
-        public MainWindow()
+        public Button()
         {
             InitializeComponent();
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-        
         }
     }
 }

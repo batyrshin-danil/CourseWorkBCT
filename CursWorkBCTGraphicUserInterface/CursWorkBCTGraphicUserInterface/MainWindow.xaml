@@ -5,8 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CursWorkBCTGraphicUserInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Курсовая работа ОТС" Height="249" Width="801" Icon="Resources/U4dMupaSDVo.ico" ResizeMode="NoResize" Topmost="True" WindowStyle="ThreeDBorderWindow" WindowStartupLocation="CenterScreen" Background="{x:Null}" FontFamily="Segoe UI Light" SizeToContent="WidthAndHeight">
+    <Grid HorizontalAlignment="Left" Height="220" VerticalAlignment="Top" Width="795">
+        <Image HorizontalAlignment="Left" Height="220" VerticalAlignment="Top" Width="795" Stretch="Fill" Source="Resources/IUzWUVs09Z0.jpg">
+            <Image.Effect>
+                <BlurEffect Radius="5"/>
+            </Image.Effect>
+        </Image>
+        <Rectangle HorizontalAlignment="Left" Height="236" VerticalAlignment="Top" Width="311" Stroke="#FF1D1D1D" Fill="#662E2E2E" Margin="0,-8" StrokeThickness="0.8">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="7"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <TextBox HorizontalAlignment="Left" Height="34" Margin="16,33,0,0" TextWrapping="Wrap" Text="Фамилия" VerticalAlignment="Top" Width="277" Background="Transparent" BorderBrush="#FFA0A0A0" Foreground="White" FontSize="22" TextChanged="TextBox_TextChanged" CaretBrush="White"/>
+        <TextBox HorizontalAlignment="Left" Height="34" Margin="16,72,0,0" TextWrapping="Wrap" Text="Имя" VerticalAlignment="Top" Width="277" Background="Transparent" BorderBrush="#FFA0A0A0" Foreground="White" FontSize="22" TextChanged="TextBox_TextChanged" CaretBrush="White"/>
+        <TextBox HorizontalAlignment="Left" Height="34" Margin="16,111,0,0" TextWrapping="Wrap" Text="Отчество" VerticalAlignment="Top" Width="277" Background="Transparent" BorderBrush="#FFA0A0A0" Foreground="White" FontSize="22" TextChanged="TextBox_TextChanged" CaretBrush="White"/>
+        <TextBox HorizontalAlignment="Left" Height="34" Margin="16,150,0,0" TextWrapping="Wrap" Text="Группа" VerticalAlignment="Top" Width="277" Background="Transparent" BorderBrush="#FFA0A0A0" Foreground="White" FontSize="22" TextChanged="TextBox_TextChanged" CaretBrush="White"/>
+        <TextBox HorizontalAlignment="Left" Height="73" Margin="340,33,0,0" TextWrapping="Wrap" Text="№ Зачетной книжки" VerticalAlignment="Top" Width="435" BorderBrush="#FF569DE5" Foreground="#FFB8B8B8" FontSize="48" TextChanged="TextBox_TextChanged" CaretBrush="#FF274257" SelectionBrush="#72979797" Background="#3F000000"/>
+        <Button Content="Сделать красиво." HorizontalAlignment="Left" Margin="340,111,0,0" VerticalAlignment="Top" Width="435" Height="34" Background="#BF151515" BorderBrush="#FF1D1D1D" Foreground="White" FontSize="20">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
     </Grid>
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="Green"/>
+    </Window.Resources>
 </Window>
