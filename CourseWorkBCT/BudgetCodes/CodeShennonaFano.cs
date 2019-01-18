@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CourseWorkBCT.ElementsTree;
 
 namespace CourseWorkBCT.BudgetCodes
 {
     public class CodeShennonaFano
     {
-        private List<Node> leafShennonaFanoTree = new List<Node>();
-        private Node rootTreeShennonaFano;
+        protected List<Node> leafTree = new List<Node>();
+        protected Node rootTree;
         //
         // Словарь для хранения пар "символ:код".
         public Dictionary<string, string> tableCodes { get; private set; }
@@ -18,24 +16,30 @@ namespace CourseWorkBCT.BudgetCodes
         public CodeShennonaFano(Dictionary<string, double> probSymbol)
         {
             CreatingListLeaf(probSymbol);
+            tableCodes = CreatingTree();
         }
         //
-        // Создаем список листьев кодового дерева Хаффмана и сортируем его по возрастания слева-направо.
-        private void CreatingListLeaf(Dictionary<string, double> probSymbol)
+        // Создаем список листьев кодового дерева и сортируем его по возрастания слева-направо.
+        protected void CreatingListLeaf(Dictionary<string, double> probSymbol)
         {
             foreach (string key in probSymbol.Keys)
             {
-                leafShennonaFanoTree.Add(new Leaf(key, probSymbol[key]));
+                leafTree.Add(new Leaf(key, probSymbol[key]));
             }
-            //
             // Сортировка списка листьев по возрастанию.
-            leafShennonaFanoTree = SortingLeafList(leafShennonaFanoTree);
+            leafTree = SortingLeafList(leafTree);
         }
         //
         // Метод создания кодового дерева Шеннона-Фано.
-        private Dictionary<string, string> CreatingTreeShennonaFano()
+        protected virtual Dictionary<string, string> CreatingTree()
         {
             return null;
+        }
+        //
+        // Метод реализующий сортировку списка листьев по возрастанию.
+        protected List<Node> SortingLeafList(List<Node> leafList)
+        {
+            return leafList.OrderBy(Node => Node.getPi()).ToList();
         }
         //
         // Метод деления списка листьев на две примерно равные половины.
@@ -79,12 +83,6 @@ namespace CourseWorkBCT.BudgetCodes
             }
 
             return listLeafList;
-        }
-        //
-        // Метод реализующий сортировку списка листьев по возрастанию.
-        private List<Node> SortingLeafList(List<Node> leafList)
-        {
-            return leafList.OrderBy(Node => Node.getPi()).ToList();
-        }
+        }        
     }
 }

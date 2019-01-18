@@ -13,11 +13,12 @@ namespace CourseWorkBCT.BlocksDS
         public string[][] TableBudgetCode { get; private set; }
         public Dictionary<string,string> TableCodes { get; private set; }
         public Dictionary<string,double> Parameters { get; private set; }
+        public MessageSource messageSource { get; private set; }
 
         public List<string> Message { get; private set; }
 
         private Dictionary<string,double> parametersMS;
-        private MessageSource messageSource;
+        
 
         public SourceCoder(MessageSource messageSource)
         {

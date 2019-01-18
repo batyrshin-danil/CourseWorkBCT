@@ -1,31 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using CourseWorkBCT.BlocksDS;
 using CourseWorkBCT.BudgetCodes;
+using CourseWorkBCT.SupportClass;
 
 namespace CourseWorkOTS
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            MessageSource messageSource = new MessageSource(new int[4] { 6, 3, 0, 5 });
-            SourceCoder sourceCoder = new SourceCoder(messageSource);
+            
+        }
 
-            foreach(string symbol in messageSource.Message)
-            {
-                Console.WriteLine(symbol);
-            }
-
-            int a = 3;
-
-            Console.WriteLine(Convert.ToString(a, 2));
-            Console.WriteLine(Convert.ToString(a, 16));
-
-            Console.ReadLine();
+        static public double f(double x)
+        {
+            return Math.Pow(x,2) + Math.Cos(x);
         }
     }
 }

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CourseWorkBCT.ElementsTree
 {
     //
     // Класс узла дерева.
     // 
-    internal class Node
+    public class Node
     {
         private Node leftElement;
         private Node rightElement;
@@ -23,7 +19,6 @@ namespace CourseWorkBCT.ElementsTree
             this.leftElement = leftElement;
             this.rightElement = rightElement;
         }
-
         public virtual void searchSymbol(Dictionary<string, string> tableCodes, string acc)
         {
             leftElement.searchSymbol(tableCodes, acc + "0");
