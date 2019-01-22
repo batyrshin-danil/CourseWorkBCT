@@ -12,7 +12,7 @@ namespace CourseWorkBCT.BudgetCodes
         //
         // Словарь для хранения пар "символ:код".
         public Dictionary<string, string> tableCodes { get; private set; }
-
+                
         public CodeShennonaFano(Dictionary<string, double> probSymbol)
         {
             CreatingListLeaf(probSymbol);

@@ -102,10 +102,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\IUzWUVs09Z0.jpg" />
+    <Resource Include="Resources\backgroundImage.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\U4dMupaSDVo.ico" />
+    <Resource Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\github.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\help.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

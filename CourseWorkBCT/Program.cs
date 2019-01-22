@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Windows.Forms;
-using CourseWorkBCT.BlocksDS;
-using CourseWorkBCT.BudgetCodes;
+
+using CourseWorkBCT.WordNote;
 using CourseWorkBCT.SupportClass;
 
-namespace CourseWorkOTS
+namespace CourseWorkBCT
 {
     class Program
     {
         static void Main()
         {
-            
-        }
+            Student student = new Student("Данил", "Батыршин", "Русланович", "ИКТр-62", "160305", "Хабаров Е.О.");
 
-        static public double f(double x)
-        {
-            return Math.Pow(x,2) + Math.Cos(x);
+            CourceWorkBCT courceWorkBCT = new CourceWorkBCT(student);
+
+            Console.ReadLine();
         }
     }
 }

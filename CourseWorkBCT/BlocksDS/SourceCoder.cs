@@ -26,6 +26,8 @@ namespace CourseWorkBCT.BlocksDS
             parametersMS = messageSource.Parameters;
             ChoiseBudgetCode(messageSource.Variable, messageSource.ProbSymbol);
             CreatingTableBudgetCode(messageSource.ProbSymbol);
+
+            StartBlock();
         }
 
         public void CreatingTableBudgetCode(Dictionary<string, double> probSymbol)

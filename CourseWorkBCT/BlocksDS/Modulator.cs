@@ -4,7 +4,7 @@ using CourseWorkBCT.SupportClass;
 
 namespace CourseWorkBCT.BlocksDS
 {
-    class Modulator
+    public class Modulator
     {
         public int TypeModulation { get; private set; }
         public Dictionary<string, double> Parameters { get; private set; }

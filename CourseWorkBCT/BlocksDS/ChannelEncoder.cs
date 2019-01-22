@@ -6,7 +6,7 @@ namespace CourseWorkBCT.BlocksDS
 {
     public class ChannelEncoder
     {
-        public List<string> Message { get; private set; }
+        public List<string> Message { get; private set; } = new List<string>();
         public Dictionary<string, List<string>> CodesHemming { get; private set; }
         public Dictionary<string, double> Parameters { get; private set; }
 
@@ -73,9 +73,17 @@ namespace CourseWorkBCT.BlocksDS
 
         private void HemmingCodingMessage(string message)
         {
+            while (true)
+            {
+                if (message.Length % 4 == 0)
+                {
+                    break;
+                }
+                message += '0';
+            }
             for (int i = 0;i < message.Length;i+=4)
             {
-                Message.Add(CodesHemming[message.Substring(i, 4).PadRight(4, '0')][1]);
+                Message.Add(CodesHemming[message.Substring(i, 4)][1]);
             }
         }
 
@@ -90,13 +98,9 @@ namespace CourseWorkBCT.BlocksDS
             for (int i = 0;i < 16; i++)
             {
                 binNumber = Convert.ToString(i, 2).PadLeft(4, '0');
-                testBits = TestBits(new int[4]{
-                            Convert.ToInt32(binNumber[0]),
-                            Convert.ToInt32(binNumber[1]),
-                            Convert.ToInt32(binNumber[2]),
-                            Convert.ToInt32(binNumber[3])});
-                code = binNumber + testBits;
 
+                testBits = TestBits(binNumber);
+                code = binNumber + testBits;
                 CodesHemming.Add(
                     binNumber,
                     new List<string>() {testBits,code,Convert.ToString(code.Count(num => num == '1'))}
@@ -104,13 +108,23 @@ namespace CourseWorkBCT.BlocksDS
             }
         }
 
-        private string TestBits(int[] number)
+        private string TestBits(string number)
         {
-            string testBits = Convert.ToString(number[0] ^ number[1] ^ number[2]);
-            testBits += Convert.ToString(number[1] ^ number[2] ^ number[3]);
-            testBits += Convert.ToString(number[0] ^ number[2] ^ number[3]);
+            string testBits = XORTestBits(number[0], number[1], number[2]);
+
+            testBits += XORTestBits(number[1], number[2], number[3]);
+
+            testBits += XORTestBits(number[0], number[2], number[3]);
 
             return testBits;
+        }
+
+        private string XORTestBits(char a, char b, char c)
+        {
+            return Convert.ToString(
+                Convert.ToInt32(a.ToString(), 2) ^
+                Convert.ToInt32(b.ToString(), 2) ^
+                Convert.ToInt32(c.ToString(), 2));
         }
     }
 }
