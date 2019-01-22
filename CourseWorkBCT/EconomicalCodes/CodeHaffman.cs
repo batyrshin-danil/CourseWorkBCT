@@ -1,33 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using CourseWorkBCT.ElementsTree;
+using CourseWorkBCT.EconomicalCodes.ElementsTree;
 
-namespace CourseWorkBCT.BudgetCodes
+namespace CourseWorkBCT.EconomicalCodes
 {
     public class CodeHaffman : CodeShennonaFano
     {
-        public CodeHaffman(Dictionary<string, double> probSymbol) : base(probSymbol) { }
+        public CodeHaffman(Dictionary<string, double> probalitiesSymbol) : base(probalitiesSymbol) { }
         //
         // Метод создания кодового дерева Хаффмана.
         protected override Dictionary<string, string> CreatingTree()
         {
-            while (leafTree.Count > 1)
+            while (leafsTree.Count > 1)
             {
-                var left = leafTree[0];
-                var right = leafTree[1];
-                leafTree.RemoveAt(1);
-                leafTree.RemoveAt(0);
+                var left = leafsTree[0];
+                var right = leafsTree[1];
+                leafsTree.RemoveAt(1);
+                leafsTree.RemoveAt(0);
 
                 double Pi = left.getPi() + right.getPi();
                 string Name = Convert.ToString(Pi);
 
-                leafTree.Add(new Node(Name, Pi, left, right));
+                leafsTree.Add(new Node(Name, Pi, left, right));
                 
-                leafTree = SortingLeafList(leafTree);
+                leafsTree = SortingLeafs(leafsTree);
             }
 
-            rootTree = leafTree[0];
-            leafTree = null;
+            rootTree = leafsTree[0];
+            leafsTree = null;
             Dictionary<string, string> tableCodes = new Dictionary<string, string>();
 
             rootTree.searchSymbol(tableCodes, "");

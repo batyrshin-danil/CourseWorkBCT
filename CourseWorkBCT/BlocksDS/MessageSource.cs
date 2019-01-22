@@ -14,20 +14,20 @@ namespace CourseWorkBCT.BlocksDS
         public int BaseAlphabet { get; private set; }
         public List<string> Message { get; private set; }
         public Dictionary<string,double> Parameters { get; private set; }
-        public Dictionary<string, double> ProbSymbol{ get; private set; }
-        public int[] Variable { get; private set; }
+        public Dictionary<string, double> ProbalitiesSymbol{ get; private set; }
+        public int[] variationCourseWork { get; private set; }
 
         public MessageSource(int [] variable)
         {
-            Variable = variable;
+            variationCourseWork = variable;
             CreatingProbalityTable();
-            StartBlock();
+            Initialization();
         }
 
         public MessageSource(Dictionary<string, double> probSymbol)
         {
-            ProbSymbol = probSymbol;
-            StartBlock();
+            ProbalitiesSymbol = probSymbol;
+            Initialization();
         }
 
         public double Vi(int[] variable)
@@ -68,16 +68,15 @@ namespace CourseWorkBCT.BlocksDS
         // Следующий метод генерирует сообщение из 10-ти случайно выбранных допустимых символов.
         public List<string> GenerationgMessage(List<string> alphabet)
         {
-            List<string> messageLocal = new List<string>();
-            List<string> listSymbol = alphabet;
+            List<string> message = new List<string>();
 
-            Random random = new Random();
+            Random randomSymbol = new Random();
 
             for (int i = 0; i < 10; i++)
             {
-                messageLocal.Add(Convert.ToString(listSymbol[random.Next(listSymbol.Count())]));
+                message.Add(alphabet[randomSymbol.Next(alphabet.Count())]);
             }
-            return messageLocal;
+            return message;
         }
         //
         // Установка сообщения принудительно.
@@ -90,35 +89,35 @@ namespace CourseWorkBCT.BlocksDS
         // Метод вычисления вероятностей появления символов.
         private void CreatingProbalityTable()
         {
-            ProbSymbol = new Dictionary<string, double>()
+            ProbalitiesSymbol = new Dictionary<string, double>()
             {
-                {"а", 0.310 * (1.0 - 0.1 * Variable[3])},   {"б", 0.002 + (0.001 * Variable[0])},
-                {"в", 0.007 + (0.025 * Variable[2])},       {"г", 0.009 * (1.0 - 0.1 * Variable[1])},
-                {"д", 0.020 * (1 - 0.1 * Variable[3])},     {"е", 0.005 + (0.015 * Variable[1])},
-                {"з", 0.010 * (1 - 0.1 * Variable[0])},     {"и", 0.15 * (1 - 0.1 * Variable[1])},
-                {"к", 0.008 + (0.031 * Variable[3]) },      {"л", 0.2 * (1 - 0.1 * Variable[0])},
-                {"м", 0.006 + (0.02 * Variable[0]) },       {"н",  0.015 * (1 - 0.1 * Variable[2])},
-                {"о", 0.004 + (0.002 * Variable[3]) },      {"п", 0.003 + (0.0015 * Variable[2])},
-                {"р", 0.250 * (1 - 0.1 * Variable[2])},     {"с", 0.001 + (0.0009 * Variable[1])}
+                {"а", 0.310 * (1.0 - 0.1 * variationCourseWork[3])},   {"б", 0.002 + (0.001 * variationCourseWork[0])},
+                {"в", 0.007 + (0.025 * variationCourseWork[2])},       {"г", 0.009 * (1.0 - 0.1 * variationCourseWork[1])},
+                {"д", 0.020 * (1 - 0.1 * variationCourseWork[3])},     {"е", 0.005 + (0.015 * variationCourseWork[1])},
+                {"з", 0.010 * (1 - 0.1 * variationCourseWork[0])},     {"и", 0.15 * (1 - 0.1 * variationCourseWork[1])},
+                {"к", 0.008 + (0.031 * variationCourseWork[3]) },      {"л", 0.2 * (1 - 0.1 * variationCourseWork[0])},
+                {"м", 0.006 + (0.02 * variationCourseWork[0]) },       {"н",  0.015 * (1 - 0.1 * variationCourseWork[2])},
+                {"о", 0.004 + (0.002 * variationCourseWork[3]) },      {"п", 0.003 + (0.0015 * variationCourseWork[2])},
+                {"р", 0.250 * (1 - 0.1 * variationCourseWork[2])},     {"с", 0.001 + (0.0009 * variationCourseWork[1])}
             };
         }
 
         private void SettingBaseAlphabet()
         {
-            BaseAlphabet = ProbSymbol.Count();
+            BaseAlphabet = ProbalitiesSymbol.Count();
         }
 
-        private void StartBlock()
+        private void Initialization()
         {
             Parameters = new Dictionary<string, double>();
 
-            Parameters.Add("Vi", Vi(Variable));
-            Parameters.Add("H", H(ProbSymbol));
+            Parameters.Add("Vi", Vi(variationCourseWork));
+            Parameters.Add("H", H(ProbalitiesSymbol));
             Parameters.Add("HMax", HMax(BaseAlphabet));
             Parameters.Add("Pi", Pi(Parameters["H"], Parameters["HMax"]));
             Parameters.Add("HHatch", HHatch(Parameters["Vi"], Parameters["H"]));
 
-            Message = GenerationgMessage(ProbSymbol.Keys.ToList());
+            Message = GenerationgMessage(ProbalitiesSymbol.Keys.ToList());
         }
 
     }

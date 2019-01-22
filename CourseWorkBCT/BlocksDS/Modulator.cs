@@ -9,16 +9,17 @@ namespace CourseWorkBCT.BlocksDS
         public int TypeModulation { get; private set; }
         public Dictionary<string, double> Parameters { get; private set; }
 
-        private (double[] SignalCounts, double[] TimeCounts, double[] ModSignalCounts) VectorsPlotSignal;
+        public (double[] SignalCounts, double[] TimeCounts, double[] ModSignalCounts) VectorsPlotModulation;
+        public (double[] SpectrumCounts, double[] FrequencyCounts, double[] ModSignalCounts) VectorsPlotSpectrum;
 
         public Modulator(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
         {
-            
+            StartBlock(sourceCoder, channelEncoder);
         }
 
-        public double AmplitudeSignal(int[] variable)
+        public double AmplitudeSignal(int[] studentVariation)
         {
-            return variable[0] + variable[1] + variable[2] + variable[3] + 1;
+            return studentVariation[0] + studentVariation[1] + studentVariation[2] + studentVariation[3] + 1;
         }
 
         public double SpeedModulation(double encoderOutputSpeed)
@@ -89,9 +90,9 @@ namespace CourseWorkBCT.BlocksDS
         {
             Parameters = new Dictionary<string, double>();
 
-            ChoiseTypeModulation(sourceCoder.messageSource.Variable);
+            ChoiseTypeModulation(sourceCoder.messageSource.variationCourseWork);
 
-            Parameters.Add("U0", AmplitudeSignal(sourceCoder.messageSource.Variable));
+            Parameters.Add("U0", AmplitudeSignal(sourceCoder.messageSource.variationCourseWork));
             Parameters.Add("V0", SpeedModulation(channelEncoder.Parameters["VKk"]));
             Parameters.Add("f0", CarrierFrequency(Parameters["V0"]));
             Parameters.Add("T0", ClockInterval(Parameters["V0"]));
@@ -106,9 +107,10 @@ namespace CourseWorkBCT.BlocksDS
                 sourceCoder.Parameters["PZero"],
                 sourceCoder.Parameters["POne"]));
             Parameters.Add("PeakPower", PeakPower(Parameters["PowerZero"], Parameters["PowerOne"]));
-            Parameters.Add("PeakFactor", PeakFactor(Parameters["PowerAverage"], Parameters["PeakFactor"]));
+            Parameters.Add("PeakFactor", PeakFactor(Parameters["PowerAverage"], Parameters["PeakPower"]));
 
             MessageRange(MessagePreparation(string.Join("",channelEncoder.Message).ToCharArray()));
+            Console.WriteLine("s");
             Modulation();
         }
 
@@ -140,20 +142,20 @@ namespace CourseWorkBCT.BlocksDS
 
             int numberSamples = Convert.ToInt32(simulationInterval / 0.01);
 
-            VectorsPlotSignal.SignalCounts = new double[numberSamples];
-            VectorsPlotSignal.TimeCounts = new double[numberSamples];
+            VectorsPlotModulation.SignalCounts = new double[numberSamples];
+            VectorsPlotModulation.TimeCounts = new double[numberSamples];
 
             for(int i = 0;i < numberSamples;i++)
             {
                 double sum = 0;
-                VectorsPlotSignal.TimeCounts[i] = i * 0.01;
+                VectorsPlotModulation.TimeCounts[i] = i * 0.01;
                 
                 for (int j = 0;j < messageLength; j++)
                 {
-                    sum += message[j] * Imp(j, pulseDuration, VectorsPlotSignal.TimeCounts[i]);
+                    sum += message[j] * Impulse(j, pulseDuration, VectorsPlotModulation.TimeCounts[i]);
                 }
 
-                VectorsPlotSignal.SignalCounts[i] = sum; 
+                VectorsPlotModulation.SignalCounts[i] = sum; 
             }
         }
 
@@ -178,14 +180,25 @@ namespace CourseWorkBCT.BlocksDS
             return x; 
         }
 
+        private double SpectrumAMFM(double f)
+        {
+            return G(f - Parameters["f0"]);
+        }
+
+        private double SpectrumCHM(double f)
+        {
+            return G(f - Parameters["f0"] + Parameters["deltaf"]) + G(f - Parameters["f0"] - Parameters["deltaf"]);
+        }
+
         private void Modulation()
         {
-            VectorsPlotSignal.ModSignalCounts = new double[VectorsPlotSignal.SignalCounts.Length];
-
-            for(int i = 0;i < VectorsPlotSignal.SignalCounts.Length; i++)
+            VectorsPlotModulation.ModSignalCounts = new double[VectorsPlotModulation.SignalCounts.Length];
+            Console.WriteLine(VectorsPlotModulation.SignalCounts.Length);
+            for(int i = 0;i < VectorsPlotModulation.SignalCounts.Length; i++)
             {
-                VectorsPlotSignal.ModSignalCounts[i] = ModulationSelection(
-                    VectorsPlotSignal.SignalCounts[i], VectorsPlotSignal.TimeCounts[i]);
+                Console.WriteLine(i);
+                VectorsPlotModulation.ModSignalCounts[i] = ModulationSelection(
+                    VectorsPlotModulation.SignalCounts[i], VectorsPlotModulation.TimeCounts[i]);
             }
         }
 
@@ -219,9 +232,23 @@ namespace CourseWorkBCT.BlocksDS
             return null;
         }
 
-        private double Imp(double symbolIndex, double pulseDuration, double t)
+        private double Impulse(double symbolIndex, double pulseDuration, double t)
         {
             return (t >= pulseDuration * symbolIndex) && (t < pulseDuration * ++symbolIndex) ? 1 : 0;
+        }
+
+        private double G(double f)
+        {
+            if (f == 0)
+            {
+                return Math.Pow(Parameters["U0"], 2) * Parameters["T0"];
+            }
+            return Math.Pow(Parameters["U0"], 2) * Parameters["T0"] * Sinc(Math.PI * f * Parameters["T0"]);
+        }
+
+        private double Sinc(double x)
+        {
+            return Math.Pow(Math.Sin(x), 2) / Math.Pow(x,2);
         }
     }
 }

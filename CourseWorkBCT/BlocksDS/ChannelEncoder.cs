@@ -12,9 +12,9 @@ namespace CourseWorkBCT.BlocksDS
 
         public ChannelEncoder(SourceCoder sourceCoder)
         {
-            CreatingTableHemming();
+            CreatingCodesHemming();
             HemmingCodingMessage(string.Join("", sourceCoder.Message));
-            StartBlock(sourceCoder.Parameters);
+            Initialization(sourceCoder.Parameters);
         }
 
         public double PKk(int r, int n)
@@ -59,7 +59,7 @@ namespace CourseWorkBCT.BlocksDS
             return (VKi / R);
         }
 
-        private void StartBlock(Dictionary<string, double> parametersSC)
+        private void Initialization(Dictionary<string, double> parametersSourceCoder)
         {
             Parameters = new Dictionary<string, double>();
 
@@ -68,53 +68,53 @@ namespace CourseWorkBCT.BlocksDS
             Parameters.Add("DMin", DMin(Message));
             Parameters.Add("Qi", Qi(Parameters["DMin"]));
             Parameters.Add("N", N(4, Parameters["R"]));
-            Parameters.Add("VKk", VKk(parametersSC["VKi"], Parameters["R"]));
+            Parameters.Add("VKk", VKk(parametersSourceCoder["VKi"], Parameters["R"]));
         }
 
-        private void HemmingCodingMessage(string message)
+        private void HemmingCodingMessage(string messageSourceCoder)
         {
             while (true)
             {
-                if (message.Length % 4 == 0)
+                if (messageSourceCoder.Length % 4 == 0)
                 {
                     break;
                 }
-                message += '0';
+                messageSourceCoder += '0';
             }
-            for (int i = 0;i < message.Length;i+=4)
+            for (int i = 0;i < messageSourceCoder.Length;i+=4)
             {
-                Message.Add(CodesHemming[message.Substring(i, 4)][1]);
+                Message.Add(CodesHemming[messageSourceCoder.Substring(i, 4)][1]);
             }
         }
 
-        private void CreatingTableHemming()
+        private void CreatingCodesHemming()
         {
             CodesHemming = new Dictionary<string, List<string>>();
 
-            string binNumber;
+            string informationBits;
             string testBits;
-            string code;
+            string codeHemming;
 
             for (int i = 0;i < 16; i++)
             {
-                binNumber = Convert.ToString(i, 2).PadLeft(4, '0');
+                informationBits = Convert.ToString(i, 2).PadLeft(4, '0');
 
-                testBits = TestBits(binNumber);
-                code = binNumber + testBits;
+                testBits = TestBits(informationBits);
+                codeHemming = informationBits + testBits;
                 CodesHemming.Add(
-                    binNumber,
-                    new List<string>() {testBits,code,Convert.ToString(code.Count(num => num == '1'))}
+                    informationBits,
+                    new List<string>() {testBits,codeHemming,Convert.ToString(codeHemming.Count(num => num == '1'))}
                     );
             }
         }
 
-        private string TestBits(string number)
+        private string TestBits(string informationBits)
         {
-            string testBits = XORTestBits(number[0], number[1], number[2]);
+            string testBits;
 
-            testBits += XORTestBits(number[1], number[2], number[3]);
-
-            testBits += XORTestBits(number[0], number[2], number[3]);
+            testBits = XORTestBits(informationBits[0], informationBits[1], informationBits[2]);
+            testBits += XORTestBits(informationBits[1], informationBits[2], informationBits[3]);
+            testBits += XORTestBits(informationBits[0], informationBits[2], informationBits[3]);
 
             return testBits;
         }

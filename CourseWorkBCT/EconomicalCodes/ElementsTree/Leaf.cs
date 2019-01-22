@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CourseWorkBCT.ElementsTree
+namespace CourseWorkBCT.EconomicalCodes.ElementsTree
 {
     //
     // Класс описывающий лист дерева, как частный случай узла.

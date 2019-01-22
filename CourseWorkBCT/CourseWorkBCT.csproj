@@ -237,12 +237,13 @@
   <ItemGroup>
     <Compile Include="BlocksDS\ChannelEncoder.cs" />
     <Compile Include="BlocksDS\Modulator.cs" />
-    <Compile Include="BudgetCodes\CodeHaffman.cs" />
-    <Compile Include="BudgetCodes\CodeShennonaFano.cs" />
+    <Compile Include="EconomicalCodes\CodeHaffman.cs" />
+    <Compile Include="EconomicalCodes\CodeShennonaFano.cs" />
     <Compile Include="BlocksDS\MessageSource.cs" />
     <Compile Include="BlocksDS\SourceCoder.cs" />
-    <Compile Include="BudgetCodes\ElementsTree\Leaf.cs" />
-    <Compile Include="BudgetCodes\ElementsTree\Node.cs" />
+    <Compile Include="EconomicalCodes\EconomicalCode.cs" />
+    <Compile Include="EconomicalCodes\ElementsTree\Leaf.cs" />
+    <Compile Include="EconomicalCodes\ElementsTree\Node.cs" />
     <Compile Include="CourceWorkBCT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

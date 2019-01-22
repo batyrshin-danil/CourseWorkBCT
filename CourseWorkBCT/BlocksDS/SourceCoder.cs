@@ -1,52 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CourseWorkBCT.BlocksDS;
-using CourseWorkBCT.BudgetCodes;
+
+using CourseWorkBCT.EconomicalCodes;
 
 namespace CourseWorkBCT.BlocksDS
 {
     public class SourceCoder
     {
-        public string[][] TableBudgetCode { get; private set; }
-        public Dictionary<string,string> TableCodes { get; private set; }
+        public string[][] ParametersEconomicalCodes { get; private set; }
+        public Dictionary<string,string> EconomicalCodes { get; private set; }
         public Dictionary<string,double> Parameters { get; private set; }
         public MessageSource messageSource { get; private set; }
 
         public List<string> Message { get; private set; }
 
-        private Dictionary<string,double> parametersMS;
+        private Dictionary<string,double> parametersMessageSource;
         
 
         public SourceCoder(MessageSource messageSource)
         {
             this.messageSource = messageSource;
-            parametersMS = messageSource.Parameters;
-            ChoiseBudgetCode(messageSource.Variable, messageSource.ProbSymbol);
-            CreatingTableBudgetCode(messageSource.ProbSymbol);
+            parametersMessageSource = messageSource.Parameters;
+            ChoiseEconomicalCode(messageSource.variationCourseWork, messageSource.ProbalitiesSymbol);
+            InitializationParametersEconomicalCodes(messageSource.ProbalitiesSymbol);
 
-            StartBlock();
+            Initialization();
         }
 
-        public void CreatingTableBudgetCode(Dictionary<string, double> probSymbol)
+        public void InitializationParametersEconomicalCodes(Dictionary<string, double> probalitiesSymbol)
         {
             /* Инициализируем массив("таблицу") с количеством строк(одномерных массивов строк) 
              * равным количеству символов в переданном словаре. */
-            TableBudgetCode = new string[probSymbol.Count][];
-            List<string> keys = probSymbol.Keys.ToList();
+            ParametersEconomicalCodes = new string[probalitiesSymbol.Count][];
+            List<string> symbolsAlphabet = probalitiesSymbol.Keys.ToList();
 
-            for (int i = 0; i < keys.Count; i++)
+            for (int i = 0; i < symbolsAlphabet.Count; i++)
             {
-                TableBudgetCode[i] = new string[]
+                ParametersEconomicalCodes[i] = new string[]
                 {
-                    keys[i],
-                    probSymbol[keys[i]].ToString(),
-                    TableCodes[keys[i]],
-                    TableCodes[keys[i]].Length.ToString(),
-                    TableCodes[keys[i]].Count(sym => sym == '0').ToString(),
-                    TableCodes[keys[i]].Count(sym => sym == '1').ToString()
+                    symbolsAlphabet[i],
+                    probalitiesSymbol[symbolsAlphabet[i]].ToString(),
+                    EconomicalCodes[symbolsAlphabet[i]],
+                    EconomicalCodes[symbolsAlphabet[i]].Length.ToString(),
+                    EconomicalCodes[symbolsAlphabet[i]].Count(sym => sym == '0').ToString(),
+                    EconomicalCodes[symbolsAlphabet[i]].Count(sym => sym == '1').ToString()
                 };
             }
         }
@@ -61,7 +59,7 @@ namespace CourseWorkBCT.BlocksDS
             double K = 0;
             for (int i = 0; i < baseAlphabet; i++)
             {
-                K += Convert.ToDouble(TableBudgetCode[i][3]) * Convert.ToDouble(TableBudgetCode[i][1]);
+                K += Convert.ToDouble(ParametersEconomicalCodes[i][3]) * Convert.ToDouble(ParametersEconomicalCodes[i][1]);
             }
             return K;
         }
@@ -76,7 +74,7 @@ namespace CourseWorkBCT.BlocksDS
             double pZero = 0;
             for (int i = 0;i < baseAlphabet; i++)
             {
-                pZero += Convert.ToDouble(TableBudgetCode[i][1]) * Convert.ToDouble(TableBudgetCode[i][4]);
+                pZero += Convert.ToDouble(ParametersEconomicalCodes[i][1]) * Convert.ToDouble(ParametersEconomicalCodes[i][4]);
             }
             return pZero;
         }
@@ -86,7 +84,7 @@ namespace CourseWorkBCT.BlocksDS
             double pOne = 0;
             for (int i=0;i < baseAlphabet; i++)
             {
-                pOne += Convert.ToDouble(TableBudgetCode[i][1]) * Convert.ToDouble(TableBudgetCode[i][5]);
+                pOne += Convert.ToDouble(ParametersEconomicalCodes[i][1]) * Convert.ToDouble(ParametersEconomicalCodes[i][5]);
             }
             return pOne;
         }
@@ -104,39 +102,41 @@ namespace CourseWorkBCT.BlocksDS
             return 1 - (H / Math.Log(2, 2));
         }
 
-        public List<string> GenerationMessage(List<string> message)
+        public List<string> GenerationMessage(List<string> messageMessageSource)
         {
-            List<string> messageLocal = new List<string>();
-            foreach(string sym in message)
+            List<string> message = new List<string>();
+            foreach(string symbol in messageMessageSource)
             {
-                messageLocal.Add(TableCodes[sym]);
+                message.Add(EconomicalCodes[symbol]);
             }
-            return messageLocal;
+            return message;
         }
 
 
-        private void ChoiseBudgetCode(int[] vatiable, Dictionary<string,double> probSymbol)
+        private void ChoiseEconomicalCode(int[] variationCourseWork, Dictionary<string,double> probalitiesSymbol)
         {
-            int choisePointer = (vatiable[1] + vatiable[3]) % 2;
+            int choisePointer = (variationCourseWork[1] + variationCourseWork[3]) % 2;
+            EconomicalCode economicalCode;
+
             if (choisePointer == 0)
-            {
-                CodeHaffman codeHaffman = new CodeHaffman(probSymbol);
-                TableCodes = codeHaffman.tableCodes;
+            { 
+                economicalCode = new CodeHaffman(probalitiesSymbol);
             }
             else
             {
-                CodeShennonaFano codeShennonaFano = new CodeShennonaFano(probSymbol);
-                TableCodes = codeShennonaFano.tableCodes;
+                economicalCode = new CodeShennonaFano(probalitiesSymbol);
             }
+
+            EconomicalCodes = economicalCode.economicalCodes;
         }
 
-        private void StartBlock()
+        private void Initialization()
         {
             Parameters = new Dictionary<string, double>();
 
-            Parameters.Add("KMIn", KMin(parametersMS["H"]));
+            Parameters.Add("KMIn", KMin(parametersMessageSource["H"]));
             Parameters.Add("K", K(messageSource.BaseAlphabet));
-            Parameters.Add("VKi", VKi(parametersMS["Vi"], Parameters["K"]));
+            Parameters.Add("VKi", VKi(parametersMessageSource["Vi"], Parameters["K"]));
             Parameters.Add("PZero", PZero(messageSource.BaseAlphabet));
             Parameters.Add("POne", POne(messageSource.BaseAlphabet));
             Parameters.Add("H", H(Parameters["PZero"], Parameters["POne"]));
