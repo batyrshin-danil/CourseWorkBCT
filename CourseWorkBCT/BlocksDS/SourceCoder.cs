@@ -1,8 +1,7 @@
-﻿using System;
+﻿using CourseWorkBCT.EconomicalCodes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using CourseWorkBCT.EconomicalCodes;
 
 namespace CourseWorkBCT.BlocksDS
 {
@@ -10,20 +9,27 @@ namespace CourseWorkBCT.BlocksDS
     {
         public string[][] ParametersEconomicalCodes { get; private set; }
         public Dictionary<string,string> EconomicalCodes { get; private set; }
-        public Dictionary<string,double> Parameters { get; private set; }
         public MessageSource messageSource { get; private set; }
-
         public List<string> Message { get; private set; }
 
-        private Dictionary<string,double> parametersMessageSource;
-        
+        public double LimitShennona { get; private set; }
+        public double AverageCountBinaryCharacters { get; private set; }
+        public double AverageSpeed { get; private set; }
+        public double ProbabilityZero { get; private set; }
+        public double ProbabilityOne { get; private set; }
+        public double Entropy { get; set; }
+        public double Efficiency { get; set; }
+
+        public SourceCoder()
+        {
+
+        }
 
         public SourceCoder(MessageSource messageSource)
         {
             this.messageSource = messageSource;
-            parametersMessageSource = messageSource.Parameters;
-            ChoiseEconomicalCode(messageSource.variationCourseWork, messageSource.ProbalitiesSymbol);
-            InitializationParametersEconomicalCodes(messageSource.ProbalitiesSymbol);
+            ChoiseEconomicalCode(messageSource.VariationCourseWork, messageSource.ProbabilitiesCharacters);
+            InitializationParametersEconomicalCodes(messageSource.ProbabilitiesCharacters);
 
             Initialization();
         }
@@ -49,57 +55,60 @@ namespace CourseWorkBCT.BlocksDS
             }
         }
 
-        public double KMin(double H)
+        public double CalculationLimitShennona(double entropyMessageSource)
         {
-            return H / Math.Log(2, 2);
+            return entropyMessageSource / Math.Log(2, 2);
         }
 
-        public double K(int baseAlphabet)
+        public double CalculationAverageCountBinaryCharacters(int baseAlphabet)
         {
-            double K = 0;
+            double averageCountBinaryCharacters = 0;
             for (int i = 0; i < baseAlphabet; i++)
             {
-                K += Convert.ToDouble(ParametersEconomicalCodes[i][3]) * Convert.ToDouble(ParametersEconomicalCodes[i][1]);
+                averageCountBinaryCharacters += 
+                    Convert.ToDouble(ParametersEconomicalCodes[i][3]) * Convert.ToDouble(ParametersEconomicalCodes[i][1]);
             }
-            return K;
+            return averageCountBinaryCharacters;
         }
 
-        public double VKi(double Vi, double K)
+        public double CalculationAverageSpeed(double speedMessageSource, double averageCountBinaryCharacter)
         {
-            return Vi * K;
+            return speedMessageSource * averageCountBinaryCharacter;
         }
 
-        public double PZero(int baseAlphabet)
+        public double CalculationProbabilityZero(int baseAlphabet)
         {
-            double pZero = 0;
+            double probabilityZero = 0;
             for (int i = 0;i < baseAlphabet; i++)
             {
-                pZero += Convert.ToDouble(ParametersEconomicalCodes[i][1]) * Convert.ToDouble(ParametersEconomicalCodes[i][4]);
+                probabilityZero += 
+                    Convert.ToDouble(ParametersEconomicalCodes[i][1]) * Convert.ToDouble(ParametersEconomicalCodes[i][4]);
             }
-            return pZero;
+            return probabilityZero;
         }
 
-        public double POne(int baseAlphabet)
+        public double CalculationProbabilityOne(int baseAlphabet)
         {
-            double pOne = 0;
+            double probabilityOne = 0;
             for (int i=0;i < baseAlphabet; i++)
             {
-                pOne += Convert.ToDouble(ParametersEconomicalCodes[i][1]) * Convert.ToDouble(ParametersEconomicalCodes[i][5]);
+                probabilityOne += 
+                    Convert.ToDouble(ParametersEconomicalCodes[i][1]) * Convert.ToDouble(ParametersEconomicalCodes[i][5]);
             }
-            return pOne;
+            return probabilityOne;
         }
 
-        public double H(double pZero, double pOne)
+        public double CalculationEntropy(double probabilityZero, double probabilityOne)
         {
-            double a = pZero * Math.Log(pZero, 2);
-            double b = pOne * Math.Log(pOne, 2);
+            double a = probabilityZero * Math.Log(probabilityZero, 2);
+            double b = probabilityOne * Math.Log(probabilityOne, 2);
 
             return - a - b;
         }
 
-        public double PKi(double H)
+        public double CalculationEfficiency(double entropy)
         {
-            return 1 - (H / Math.Log(2, 2));
+            return 1 - (entropy / Math.Log(2, 2));
         }
 
         public List<string> GenerationMessage(List<string> messageMessageSource)
@@ -132,15 +141,13 @@ namespace CourseWorkBCT.BlocksDS
 
         private void Initialization()
         {
-            Parameters = new Dictionary<string, double>();
-
-            Parameters.Add("KMIn", KMin(parametersMessageSource["H"]));
-            Parameters.Add("K", K(messageSource.BaseAlphabet));
-            Parameters.Add("VKi", VKi(parametersMessageSource["Vi"], Parameters["K"]));
-            Parameters.Add("PZero", PZero(messageSource.BaseAlphabet));
-            Parameters.Add("POne", POne(messageSource.BaseAlphabet));
-            Parameters.Add("H", H(Parameters["PZero"], Parameters["POne"]));
-            Parameters.Add("PKi", PKi(Parameters["H"]));
+            LimitShennona = CalculationLimitShennona(messageSource.Entropy);
+            AverageCountBinaryCharacters = CalculationAverageCountBinaryCharacters(messageSource.BaseAlphabet);
+            AverageSpeed = CalculationAverageSpeed(messageSource.Speed, AverageCountBinaryCharacters);
+            ProbabilityZero = CalculationProbabilityZero(messageSource.BaseAlphabet);
+            ProbabilityOne = CalculationProbabilityOne(messageSource.BaseAlphabet);
+            Entropy = CalculationEntropy(ProbabilityZero, ProbabilityOne);
+            Efficiency = CalculationEfficiency(Entropy);
 
             Message = GenerationMessage(messageSource.Message);
         }

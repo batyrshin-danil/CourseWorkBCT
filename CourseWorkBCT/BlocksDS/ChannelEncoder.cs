@@ -10,81 +10,98 @@ namespace CourseWorkBCT.BlocksDS
         public Dictionary<string, List<string>> CodesHemming { get; private set; }
         public Dictionary<string, double> Parameters { get; private set; }
 
+        public double CodeRedundancy { get; private set; }
+        public double CodeSpeed { get; private set; }
+        public double CodeDistance { get; private set; }
+        public double CodeCorrectingAbility { get; private set; }
+        public double AvegareCountEncoderBits { get; private set; }
+        public double AverageSpeedBits { get; private set; }
+
+        private int countTestBits = 3;
+        private int countInformationBits = 4;
+        private int countHemmingCodeBits = 7;
+
         public ChannelEncoder(SourceCoder sourceCoder)
         {
             CreatingCodesHemming();
             HemmingCodingMessage(string.Join("", sourceCoder.Message));
-            Initialization(sourceCoder.Parameters);
+            Initialization(sourceCoder);
         }
 
-        public double PKk(int r, int n)
+        public double CalculationCodeRedundancy(int countTestBits, int countHemmingCodeBits)
         {
-            return (r / n);
+            return (countTestBits / countHemmingCodeBits);
         }
 
-        public double R(int k, int n)
+        public double CalculationCodeSpeed(int countInformationBits, int countHemmingCodeBits)
         {
-            return (k / n);
+            return (countInformationBits / countHemmingCodeBits);
         }
 
-        public double DMin(List<string> message)
+        public double CalculationCodeDistance(List<string> message)
         {
             double minWeight = 0;
             
-            foreach(string block in message)
+            foreach(string codeHemming in message)
             {
-                double weightBlock = block.Count(num => num == '1');
+                double weightBlock = codeHemming.Count(num => num == '1');
 
                 if (weightBlock > minWeight && weightBlock != 0)
                 {
                     minWeight = weightBlock;
                 }
             }
-
+           
             return minWeight;
         }
 
-        public double Qi(double dMin)
+        public double CalculationCorrectingCodeAbility(double codeDistance)
         {
-            return ((dMin - 1) / 2); 
+            return (codeDistance - 1) / 2; 
         }
 
-        public double N(double k, double R)
+        public double CalculationAverageCountEncoderBits(double countInformationBits, double codeSpeed)
         {
-            return k / R;
+            return countInformationBits / codeSpeed;
         }
 
-        public double VKk(double VKi, double R)
+        public double CalculationAverageSpeedCode(double averageSpeedSourceCoder, double codeSpeed)
         {
-            return (VKi / R);
+            return (averageSpeedSourceCoder / codeSpeed);
         }
 
-        private void Initialization(Dictionary<string, double> parametersSourceCoder)
+        private void Initialization(SourceCoder sourceCoder)
         {
-            Parameters = new Dictionary<string, double>();
-
-            Parameters.Add("PKk", PKk(3, 7));
-            Parameters.Add("R", R(4, 7));
-            Parameters.Add("DMin", DMin(Message));
-            Parameters.Add("Qi", Qi(Parameters["DMin"]));
-            Parameters.Add("N", N(4, Parameters["R"]));
-            Parameters.Add("VKk", VKk(parametersSourceCoder["VKi"], Parameters["R"]));
+            CodeRedundancy = CalculationCodeRedundancy(countTestBits, countHemmingCodeBits);
+            CodeSpeed = CalculationCodeSpeed(countInformationBits, countHemmingCodeBits);
+            CodeDistance = CalculationCodeDistance(Message);
+            CodeCorrectingAbility = CalculationCorrectingCodeAbility(CodeDistance);
+            AvegareCountEncoderBits = CalculationAverageCountEncoderBits(countInformationBits, CodeSpeed);
+            AverageSpeedBits = CalculationAverageSpeedCode(sourceCoder.AverageSpeed, CodeSpeed);
         }
 
         private void HemmingCodingMessage(string messageSourceCoder)
         {
+            messageSourceCoder = PadRightMessageBeforeDividingFour(messageSourceCoder);
+
+            for (int i = 0;i < messageSourceCoder.Length;i+=countInformationBits)
+            {
+                Message.Add(CodesHemming[messageSourceCoder.Substring(i, countInformationBits)][1]);
+            }
+        }
+
+        private string PadRightMessageBeforeDividingFour(string message)
+        {
             while (true)
             {
-                if (messageSourceCoder.Length % 4 == 0)
+                if (message.Length % countInformationBits == 0)
                 {
                     break;
                 }
-                messageSourceCoder += '0';
+                message += '0';
             }
-            for (int i = 0;i < messageSourceCoder.Length;i+=4)
-            {
-                Message.Add(CodesHemming[messageSourceCoder.Substring(i, 4)][1]);
-            }
+
+            return message;
         }
 
         private void CreatingCodesHemming()
@@ -97,9 +114,9 @@ namespace CourseWorkBCT.BlocksDS
 
             for (int i = 0;i < 16; i++)
             {
-                informationBits = Convert.ToString(i, 2).PadLeft(4, '0');
+                informationBits = Convert.ToString(i, 2).PadLeft(countInformationBits, '0');
 
-                testBits = TestBits(informationBits);
+                testBits = CreatingTestBits(informationBits);
                 codeHemming = informationBits + testBits;
                 CodesHemming.Add(
                     informationBits,
@@ -108,7 +125,7 @@ namespace CourseWorkBCT.BlocksDS
             }
         }
 
-        private string TestBits(string informationBits)
+        private string CreatingTestBits(string informationBits)
         {
             string testBits;
 

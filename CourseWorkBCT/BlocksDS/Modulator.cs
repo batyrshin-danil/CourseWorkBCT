@@ -7,42 +7,54 @@ namespace CourseWorkBCT.BlocksDS
     public class Modulator
     {
         public int TypeModulation { get; private set; }
-        public Dictionary<string, double> Parameters { get; private set; }
 
         public (double[] SignalCounts, double[] TimeCounts, double[] ModSignalCounts) VectorsPlotModulation;
         public (double[] SpectrumCounts, double[] FrequencyCounts, double[] ModSignalCounts) VectorsPlotSpectrum;
 
+        public double AmplitudeSignal { get; private set; }
+        public double SpeedModulation { get; private set; }
+        public double CarrierFrequency { get; private set; }
+        public double ClockInterval { get; private set; }
+        public double DeviationFrequency { get; private set; }
+        public double WidthLineFrequencies { get; private set; }
+        public double SpectralEfficiency { get; private set; }
+        public double ZeroTransferPower { get; private set; }
+        public double OneTransferPower { get; private set; }
+        public double AveragePower { get; private set; }
+        public double PeakPower { get; private set; }
+        public double PeakFactor { get; private set; }
+
         public Modulator(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
         {
-            StartBlock(sourceCoder, channelEncoder);
+            Initialization(sourceCoder, channelEncoder);
         }
 
-        public double AmplitudeSignal(int[] studentVariation)
+        public double CalculationAmplitudeSignal(int[] studentVariation)
         {
             return studentVariation[0] + studentVariation[1] + studentVariation[2] + studentVariation[3] + 1;
         }
 
-        public double SpeedModulation(double encoderOutputSpeed)
+        public double CalculationSpeedModulation(double encoderOutputSpeed)
         {
             return encoderOutputSpeed;
         }
 
-        public double CarrierFrequency(double speedModulation)
+        public double CalculationCarrierFrequency(double speedModulation)
         {
             return 5 * speedModulation;
         }
 
-        public double ClockInterval(double speedModulation)
+        public double CalculationClockInterval(double speedModulation)
         {
             return 1 / speedModulation;
         }
 
-        public double DeviationFrequencies(double clockInterval)
+        public double CalculationDeviationFrequeny(double clockInterval)
         {
             return 1 / (2 * clockInterval);
         }
 
-        public double WidthLineFrequencies(double deviationFrequencies, double clockInterval)
+        public double CalculationWidthLineFrequencies(double deviationFrequencies, double clockInterval)
         {
             if (TypeModulation == 1)
             {
@@ -52,71 +64,70 @@ namespace CourseWorkBCT.BlocksDS
             return 2 / clockInterval;
         }
 
-        public double SpectralEfficiency(double widthLineFrequencies, double encoderOutputSpeed)
+        public double CalculationSpectralEfficiency(
+            double widthLineFrequencies, double averageSpeedBitsChannelEncoder)
         {
-            return encoderOutputSpeed / widthLineFrequencies;
+            return averageSpeedBitsChannelEncoder / widthLineFrequencies;
         }
 
-        public double ZeroTransferPower(double clockInterval)
+        public double CalculationZeroTransferPower(double clockInterval)
         {
             double P0 = Integration.IntegrationSimpson(ModulationSelection(), 0, 0, clockInterval);
 
             return 1 / clockInterval * Math.Pow(P0, 2);
         }
 
-        public double OneTransferPower(double clockInterval)
+        public double CalculationOneTransferPower(double clockInterval)
         {
             double P1 = Integration.IntegrationSimpson(ModulationSelection(), 1, 0, clockInterval);
 
             return 1 / clockInterval * Math.Pow(P1, 2);
         }
 
-        public double AveragePower(double zeroTransferPower, double oneTransferPower, double p0, double p1)
+        public double CalculationAveragePower(
+            double zeroTransferPower, double oneTransferPower, 
+            double probabilityZero, double probabilityOne)
         {
-            return p0 * zeroTransferPower + p1 * oneTransferPower;
+            return probabilityZero * zeroTransferPower + probabilityOne * oneTransferPower;
         }
 
-        public double PeakPower(double zeroTransferPower, double oneTransferPower)
+        public double CalculationPeakPower(double zeroTransferPower, double oneTransferPower)
         {
             return Math.Max(zeroTransferPower, oneTransferPower);
         }
 
-        public double PeakFactor(double averagePower, double peakPower)
+        public double CalculationPeakFactor(double averagePower, double peakPower)
         {
             return peakPower / averagePower;
         }
 
-        private void StartBlock(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
+        private void Initialization(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
         {
-            Parameters = new Dictionary<string, double>();
+            ChoiseTypeModulation(sourceCoder.messageSource.VariationCourseWork);
 
-            ChoiseTypeModulation(sourceCoder.messageSource.variationCourseWork);
+            AmplitudeSignal = CalculationAmplitudeSignal(sourceCoder.messageSource.VariationCourseWork);
+            SpeedModulation = CalculationSpeedModulation(channelEncoder.AverageSpeedBits);
+            CarrierFrequency = CalculationCarrierFrequency(SpeedModulation);
+            ClockInterval = CalculationClockInterval(SpeedModulation);
+            DeviationFrequency = CalculationDeviationFrequeny(ClockInterval);
+            WidthLineFrequencies = CalculationWidthLineFrequencies(DeviationFrequency, ClockInterval);
+            SpectralEfficiency = CalculationSpectralEfficiency(WidthLineFrequencies, channelEncoder.AverageSpeedBits);
+            ZeroTransferPower = CalculationZeroTransferPower(ClockInterval);
+            OneTransferPower = CalculationOneTransferPower(ClockInterval);
 
-            Parameters.Add("U0", AmplitudeSignal(sourceCoder.messageSource.variationCourseWork));
-            Parameters.Add("V0", SpeedModulation(channelEncoder.Parameters["VKk"]));
-            Parameters.Add("f0", CarrierFrequency(Parameters["V0"]));
-            Parameters.Add("T0", ClockInterval(Parameters["V0"]));
-            Parameters.Add("deltaf", DeviationFrequencies(Parameters["T0"]));
-            Parameters.Add("deltaF", WidthLineFrequencies(Parameters["deltaf"], Parameters["T0"]));
-            Parameters.Add("nu", SpectralEfficiency(Parameters["deltaF"], channelEncoder.Parameters["VKk"]));
-            Parameters.Add("PowerZero", ZeroTransferPower(Parameters["T0"]));
-            Parameters.Add("PowerOne", OneTransferPower(Parameters["T0"]));
-            Parameters.Add("PowerAverage", AveragePower(
-                Parameters["PowerZero"],
-                Parameters["PowerOne"],
-                sourceCoder.Parameters["PZero"],
-                sourceCoder.Parameters["POne"]));
-            Parameters.Add("PeakPower", PeakPower(Parameters["PowerZero"], Parameters["PowerOne"]));
-            Parameters.Add("PeakFactor", PeakFactor(Parameters["PowerAverage"], Parameters["PeakPower"]));
+            AveragePower = CalculationAveragePower(ZeroTransferPower, OneTransferPower, 
+                sourceCoder.ProbabilityOne, sourceCoder.ProbabilityZero);
+
+            PeakPower = CalculationPeakPower(ZeroTransferPower, OneTransferPower);
+            PeakFactor = CalculationPeakFactor(AveragePower, PeakPower);
 
             MessageRange(MessagePreparation(string.Join("",channelEncoder.Message).ToCharArray()));
-            Console.WriteLine("s");
             Modulation();
         }
 
-        private void ChoiseTypeModulation(int[] varible)
+        private void ChoiseTypeModulation(int[] variationCourseWork)
         {
-            TypeModulation = (varible[1] * varible[2] * varible[3]) % 3; 
+            TypeModulation = (variationCourseWork[1] * variationCourseWork[2] * variationCourseWork[3]) % 3; 
         }
 
         private int[] MessagePreparation(char[] message)
@@ -159,35 +170,37 @@ namespace CourseWorkBCT.BlocksDS
             }
         }
 
-        private double SignalAM(double c, double t)
+        private double SignalAM(double countSignal, double countTime)
         {
-            return (Parameters["U0"] / 2) * (1 + c) * Math.Cos(2 * Math.PI * Parameters["f0"] * t);
+            return (AmplitudeSignal / 2) * (1 + countSignal) * Math.Cos(2 * Math.PI * CarrierFrequency * countTime);
         }
 
-        private double SignalFM(double c, double t)
+        private double SignalPM(double countSignal, double countTime)
         {
-            return Parameters["U0"] * c * Math.Cos(2 * Math.PI * Parameters["f0"] * t);
+            return AmplitudeSignal * countSignal * Math.Cos(2 * Math.PI * CarrierFrequency * countTime);
         }
 
-        private double SignalSM(double c, double t)
+        private double SignalFM(double countSignal, double countTime)
         {
-            double x = (Parameters["U0"] / 2) * (1 - c) * 
-                Math.Cos(2 * Math.PI * (Parameters["f0"] - Parameters["deltaf"]) * t);
+            double signal = (AmplitudeSignal / 2) * (1 - countSignal) * 
+                Math.Cos(2 * Math.PI * (CarrierFrequency - DeviationFrequency) * countTime);
 
-            x += (Parameters["U0"] / 2) * (1 + c) *
-                Math.Cos(2 * Math.PI * (Parameters["f0"] + Parameters["deltaf"]) * t);
+            signal += (AmplitudeSignal / 2) * (1 + countSignal) *
+                Math.Cos(2 * Math.PI * (CarrierFrequency + DeviationFrequency) * countTime);
 
-            return x; 
+            return signal; 
         }
 
-        private double SpectrumAMFM(double f)
+        private double SpectrumAMFM(double frequency)
         {
-            return G(f - Parameters["f0"]);
+            return G(frequency - CarrierFrequency);
         }
 
-        private double SpectrumCHM(double f)
+        private double SpectrumCHM(double frequency)
         {
-            return G(f - Parameters["f0"] + Parameters["deltaf"]) + G(f - Parameters["f0"] - Parameters["deltaf"]);
+            return G(
+                frequency - CarrierFrequency + DeviationFrequency) + 
+                G(frequency - CarrierFrequency - DeviationFrequency);
         }
 
         private void Modulation()
@@ -202,16 +215,16 @@ namespace CourseWorkBCT.BlocksDS
             }
         }
 
-        private double ModulationSelection(double c, double t)
+        private double ModulationSelection(double countSignal, double countTime)
         {
             switch (TypeModulation)
             {
                 case 0:
-                    return SignalFM(c, t);
+                    return SignalPM(countSignal, countTime);
                 case 1:
-                    return SignalSM(c, t);
+                    return SignalFM(countSignal, countTime);
                 case 2:
-                    return SignalAM(c, t);
+                    return SignalAM(countSignal, countTime);
             }
 
             return 0;
@@ -222,9 +235,9 @@ namespace CourseWorkBCT.BlocksDS
             switch (TypeModulation)
             {
                 case 0:
-                    return SignalFM;
+                    return SignalPM;
                 case 1:
-                    return SignalSM;
+                    return SignalFM;
                 case 2:
                     return SignalAM;
             }
@@ -232,18 +245,19 @@ namespace CourseWorkBCT.BlocksDS
             return null;
         }
 
-        private double Impulse(double symbolIndex, double pulseDuration, double t)
+        private double Impulse(double symbolIndex, double pulseDuration, double countTime)
         {
-            return (t >= pulseDuration * symbolIndex) && (t < pulseDuration * ++symbolIndex) ? 1 : 0;
+            return (countTime >= pulseDuration * symbolIndex) && (countTime < pulseDuration * ++symbolIndex) ? 1 : 0;
         }
 
-        private double G(double f)
+        private double G(double frequency)
         {
-            if (f == 0)
+            if (frequency == 0)
             {
-                return Math.Pow(Parameters["U0"], 2) * Parameters["T0"];
+                return Math.Pow(AmplitudeSignal, 2) * ClockInterval;
             }
-            return Math.Pow(Parameters["U0"], 2) * Parameters["T0"] * Sinc(Math.PI * f * Parameters["T0"]);
+            return Math.Pow(AmplitudeSignal, 2) * ClockInterval * 
+                Sinc(Math.PI * frequency * ClockInterval);
         }
 
         private double Sinc(double x)

@@ -236,6 +236,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlocksDS\ChannelEncoder.cs" />
+    <Compile Include="BlocksDS\CommunicationChannel.cs" />
     <Compile Include="BlocksDS\Modulator.cs" />
     <Compile Include="EconomicalCodes\CodeHaffman.cs" />
     <Compile Include="EconomicalCodes\CodeShennonaFano.cs" />
