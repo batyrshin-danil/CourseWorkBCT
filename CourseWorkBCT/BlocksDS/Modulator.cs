@@ -24,8 +24,11 @@ namespace CourseWorkBCT.BlocksDS
         public double PeakPower { get; private set; }
         public double PeakFactor { get; private set; }
 
+        public SourceCoder SourceCoder { get; private set; }
+
         public Modulator(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
         {
+            SourceCoder = sourceCoder;
             Initialization(sourceCoder, channelEncoder);
         }
 
@@ -101,9 +104,14 @@ namespace CourseWorkBCT.BlocksDS
             return peakPower / averagePower;
         }
 
+        public int ChoiceTypeModulation(int[] variationCourseWork)
+        {
+            return (variationCourseWork[1] * variationCourseWork[2] * variationCourseWork[3]) % 3;
+        }
+
         private void Initialization(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
         {
-            ChoiseTypeModulation(sourceCoder.messageSource.VariationCourseWork);
+            TypeModulation = ChoiceTypeModulation(sourceCoder.messageSource.VariationCourseWork);
 
             AmplitudeSignal = CalculationAmplitudeSignal(sourceCoder.messageSource.VariationCourseWork);
             SpeedModulation = CalculationSpeedModulation(channelEncoder.AverageSpeedBits);
@@ -123,11 +131,6 @@ namespace CourseWorkBCT.BlocksDS
 
             MessageRange(MessagePreparation(string.Join("",channelEncoder.Message).ToCharArray()));
             Modulation();
-        }
-
-        private void ChoiseTypeModulation(int[] variationCourseWork)
-        {
-            TypeModulation = (variationCourseWork[1] * variationCourseWork[2] * variationCourseWork[3]) % 3; 
         }
 
         private int[] MessagePreparation(char[] message)

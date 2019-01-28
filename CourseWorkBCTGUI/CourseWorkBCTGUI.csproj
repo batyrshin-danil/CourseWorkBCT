@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{478A4704-0AC0-475F-BFD3-75BA8278F8BC}</ProjectGuid>
+    <ProjectGuid>{2B4B1B4A-CE34-4822-93DC-7D890F4B365F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>CursWorkBCTGraphicUserInterface</RootNamespace>
-    <AssemblyName>CursWorkBCTGraphicUserInterface</AssemblyName>
+    <RootNamespace>CourseWorkBCTGUI</RootNamespace>
+    <AssemblyName>CourseWorkBCTGUI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -55,10 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Button.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,9 +62,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Button.xaml.cs">
-      <DependentUpon>Button.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -101,20 +94,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\backgroundImage.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\vk.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\github.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\help.png" />
+    <Resource Include="Resources\icon.ico" />
+    <Resource Include="Resources\vk.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

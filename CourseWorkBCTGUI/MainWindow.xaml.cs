@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Diagnostics;
 
-namespace CursWorkBCTGraphicUserInterface
+namespace CursWorkBCTGUI
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml

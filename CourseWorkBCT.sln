@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWorkBCT", "CourseWorkBCT\CourseWorkBCT.csproj", "{0490F14D-77B7-4F6A-9CB6-C9CACD5355C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWorkBCTGUI", "CourseWorkBCTGUI\CourseWorkBCTGUI.csproj", "{2B4B1B4A-CE34-4822-93DC-7D890F4B365F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0490F14D-77B7-4F6A-9CB6-C9CACD5355C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0490F14D-77B7-4F6A-9CB6-C9CACD5355C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0490F14D-77B7-4F6A-9CB6-C9CACD5355C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B4B1B4A-CE34-4822-93DC-7D890F4B365F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B4B1B4A-CE34-4822-93DC-7D890F4B365F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B4B1B4A-CE34-4822-93DC-7D890F4B365F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B4B1B4A-CE34-4822-93DC-7D890F4B365F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
