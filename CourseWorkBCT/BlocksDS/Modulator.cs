@@ -140,9 +140,13 @@ namespace CourseWorkBCT.BlocksDS
             for (int i = 0;i < message.Length; i++)
             {
                 if (message[i] == '0')
+                {
                     messageLocal[i] = -1;
+                }
                 else
+                {
                     messageLocal[i] = 1;
+                }
             }
 
             return messageLocal;
@@ -212,7 +216,6 @@ namespace CourseWorkBCT.BlocksDS
             Console.WriteLine(VectorsPlotModulation.SignalCounts.Length);
             for(int i = 0;i < VectorsPlotModulation.SignalCounts.Length; i++)
             {
-                Console.WriteLine(i);
                 VectorsPlotModulation.ModSignalCounts[i] = ModulationSelection(
                     VectorsPlotModulation.SignalCounts[i], VectorsPlotModulation.TimeCounts[i]);
             }

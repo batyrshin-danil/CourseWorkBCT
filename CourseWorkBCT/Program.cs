@@ -9,7 +9,7 @@ namespace CourseWorkBCT
     {
         static void Main()
         {
-            Student student = new Student("Данил", "Батыршин", "Русланович", "ИКТр-62", "160305", "Хабаров Е.О.");
+            Student student = new Student("Данил", "Батыршин", "Русланович", "ИКТр-62", "160526", "Хабаров Е.О.");
 
             CourceWorkBCT courceWorkBCT = new CourceWorkBCT(student);
 

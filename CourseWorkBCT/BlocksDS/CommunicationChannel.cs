@@ -4,7 +4,7 @@ namespace CourseWorkBCT.BlocksDS
 {
     public class CommunicationChannel
     {
-        public int TypeChannel { get; private set; }
+        public int TypeCommunicationChannel { get; private set; }
 
         public double TrahsferСoefficient { get; private set; }
         public double SpectralDensityNoisePower { get; private set; }
@@ -38,7 +38,7 @@ namespace CourseWorkBCT.BlocksDS
         {
             double spectralDensity = 1 / (14 * speedMessageSource);
             double denominator = Math.Pow(
-                2 + (variationCourseWork[2] + variationCourseWork[3]) % 4 + TypeChannel, 
+                2 + (variationCourseWork[2] + variationCourseWork[3]) % 4 + TypeCommunicationChannel, 
                 typeModulation);
 
             spectralDensity *= 1 / denominator;
@@ -95,18 +95,26 @@ namespace CourseWorkBCT.BlocksDS
 
         private void Initialization(MessageSource messageSource, Modulator modulator)
         {
-            TypeChannel = ChoiceTypeChannel(messageSource.VariationCourseWork, modulator.TypeModulation);
+            TypeCommunicationChannel = ChoiceTypeChannel(messageSource.VariationCourseWork, modulator.TypeModulation);
             TrahsferСoefficient = CalculationTrahsferСoefficient(messageSource.VariationCourseWork);
 
             SpectralDensityNoisePower = CalculationSpectralDensityNoisePower(messageSource.VariationCourseWork,
                 modulator.TypeModulation, messageSource.Speed);
 
             Passband = CalculationPassband(modulator.WidthLineFrequencies);
+
             PeakPower = CalculationPeakPower(modulator.PeakPower);
+
             AveragePower = CalculationAveragePower(modulator.AveragePower);
+
             AveragePowerNoise = CalculationAveragePowerNoise(Passband, SpectralDensityNoisePower);
-            PeakRatioSignalNoise = CalculationPeakRatioSignalNoise(PeakPower, modulator.ClockInterval, SpectralDensityNoisePower);
-            AverageRatioSignalNoise = CalculationAverageRatioSignalNoise(AveragePower, modulator.ClockInterval, SpectralDensityNoisePower);
+
+            PeakRatioSignalNoise = CalculationPeakRatioSignalNoise(PeakPower, modulator.ClockInterval, 
+                SpectralDensityNoisePower);
+
+            AverageRatioSignalNoise = CalculationAverageRatioSignalNoise(AveragePower, modulator.ClockInterval, 
+                SpectralDensityNoisePower);
+
             ChannelCapacity = CalculationChannelCapacity(Passband, AveragePower, AveragePowerNoise);
         }
     }

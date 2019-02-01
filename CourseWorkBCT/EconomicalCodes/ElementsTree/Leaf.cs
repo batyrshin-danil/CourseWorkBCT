@@ -14,7 +14,7 @@ namespace CourseWorkBCT.EconomicalCodes.ElementsTree
 
         public override void searchSymbol(Dictionary<string, string> tableCodes, string acc)
         {
-            tableCodes[Name] = acc;
+            tableCodes[name] = acc;
         }
     }
 }

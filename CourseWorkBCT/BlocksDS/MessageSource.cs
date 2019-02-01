@@ -125,6 +125,11 @@ namespace CourseWorkBCT.BlocksDS
             Efficiency = CalculationEfficiency(Entropy, EntropyMax);
 
             Message = GenerationgMessage(ProbabilitiesCharacters.Keys.ToList());
+
+            foreach(string sym in Message)
+            {
+                Console.WriteLine(sym);
+            }
         }
 
     }

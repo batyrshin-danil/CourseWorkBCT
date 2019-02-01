@@ -235,9 +235,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlocksDS\ChannelDecoder.cs" />
     <Compile Include="BlocksDS\ChannelEncoder.cs" />
     <Compile Include="BlocksDS\CommunicationChannel.cs" />
+    <Compile Include="BlocksDS\Demodulator.cs" />
     <Compile Include="BlocksDS\Modulator.cs" />
+    <Compile Include="BlocksDS\SourceDecoder.cs" />
     <Compile Include="EconomicalCodes\CodeHaffman.cs" />
     <Compile Include="EconomicalCodes\CodeShennonaFano.cs" />
     <Compile Include="BlocksDS\MessageSource.cs" />
@@ -254,7 +257,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SupportClass\Integration.cs" />
+    <Compile Include="SupportClass\QFunction.cs" />
     <Compile Include="SupportClass\Student.cs" />
+    <Compile Include="SupportClass\XORBits.cs" />
+    <Compile Include="SupportClass\Combinatorics.cs" />
     <Compile Include="WordNote\GenerateWordNote.cs" />
   </ItemGroup>
   <ItemGroup>

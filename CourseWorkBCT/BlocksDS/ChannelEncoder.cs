@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using CourseWorkBCT.SupportClass;
+
 namespace CourseWorkBCT.BlocksDS
 {
     public class ChannelEncoder
@@ -129,19 +131,11 @@ namespace CourseWorkBCT.BlocksDS
         {
             string testBits;
 
-            testBits = XORTestBits(informationBits[0], informationBits[1], informationBits[2]);
-            testBits += XORTestBits(informationBits[1], informationBits[2], informationBits[3]);
-            testBits += XORTestBits(informationBits[0], informationBits[2], informationBits[3]);
+            testBits = XORBits.XOR(informationBits[0], informationBits[1], informationBits[2]);
+            testBits += XORBits.XOR(informationBits[1], informationBits[2], informationBits[3]);
+            testBits += XORBits.XOR(informationBits[0], informationBits[2], informationBits[3]);
 
             return testBits;
-        }
-
-        private string XORTestBits(char a, char b, char c)
-        {
-            return Convert.ToString(
-                Convert.ToInt32(a.ToString(), 2) ^
-                Convert.ToInt32(b.ToString(), 2) ^
-                Convert.ToInt32(c.ToString(), 2));
         }
     }
 }

@@ -6,12 +6,14 @@ using CourseWorkBCT.EconomicalCodes.ElementsTree;
 namespace CourseWorkBCT.EconomicalCodes
 {
     public class CodeShennonaFano : EconomicalCode
-    {                
-        public CodeShennonaFano(Dictionary<string, double> probalitiesSymbol) : base(probalitiesSymbol){}
+    {
+        public CodeShennonaFano(Dictionary<string, double> probalitiesSymbol) : base(probalitiesSymbol) { }
         //
         // Метод создания кодового дерева Шеннона-Фано.
         protected override Dictionary<string, string> CreatingTree()
         {
+            rootTree = new Node("n", 2.0);
+            AddBranch(rootTree, leafsTree);
             return null;
         }
         //
