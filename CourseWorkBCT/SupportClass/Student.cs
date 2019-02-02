@@ -16,7 +16,7 @@ namespace CourseWorkBCT.SupportClass
 
         public int[] VariableNumber { get; private set; }
 
-        public Student(string firstName, string lastName, string middleName, 
+        public Student(string firstName, string lastName, string middleName,
             string numberGroup, string recordBookNumber, string teacherName)
         {
             FullName = CreatedFullName(firstName, lastName, middleName);
@@ -73,7 +73,7 @@ namespace CourseWorkBCT.SupportClass
 
             for (int i = 0; i < 4; i++)
             {
-                variable[i] = Convert.ToInt32(variableString[i]);
+                variable[i] = Convert.ToInt32(variableString[i].ToString());
             }
 
             return variable;

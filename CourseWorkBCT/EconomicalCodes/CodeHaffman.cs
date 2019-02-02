@@ -11,23 +11,23 @@ namespace CourseWorkBCT.EconomicalCodes
         // Метод создания кодового дерева Хаффмана.
         protected override Dictionary<string, string> CreatingTree()
         {
-            while (leafsTree.Count > 1)
+            while (leavesTree.Count > 1)
             {
-                var left = leafsTree[0];
-                var right = leafsTree[1];
-                leafsTree.RemoveAt(1);
-                leafsTree.RemoveAt(0);
+                var left = leavesTree[0];
+                var right = leavesTree[1];
+                leavesTree.RemoveAt(1);
+                leavesTree.RemoveAt(0);
 
                 double Pi = left.getPi() + right.getPi();
                 string Name = Convert.ToString(Pi);
 
-                leafsTree.Add(new Node(Name, Pi, left, right));
+                leavesTree.Add(new Node(Name, Pi, left, right));
                 
-                leafsTree = SortingLeafs(leafsTree);
+                leavesTree = SortingLeafs(leavesTree);
             }
 
-            rootTree = leafsTree[0];
-            leafsTree = null;
+            rootTree = leavesTree[0];
+            leavesTree = null;
             Dictionary<string, string> tableCodes = new Dictionary<string, string>();
 
             rootTree.searchSymbol(tableCodes, "");

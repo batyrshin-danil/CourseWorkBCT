@@ -8,7 +8,7 @@ namespace CourseWorkBCT.EconomicalCodes
 {
     public abstract class EconomicalCode
     {
-        protected List<Node> leafsTree = new List<Node>();
+        protected List<Node> leavesTree = new List<Node>();
         protected Node rootTree;
         //
         // Словарь для хранения пар "символ:код".
@@ -25,10 +25,10 @@ namespace CourseWorkBCT.EconomicalCodes
         {
             foreach (string key in probalitiesSymbol.Keys)
             {
-                leafsTree.Add(new Leaf(key, probalitiesSymbol[key]));
+                leavesTree.Add(new Leaf(key, probalitiesSymbol[key]));
             }
             // Сортировка списка листьев по возрастанию.
-            leafsTree = SortingLeafs(leafsTree);
+            leavesTree = SortingLeafs(leavesTree);
         }
         //
         // Метод создания кодового дерева экономного кода.
