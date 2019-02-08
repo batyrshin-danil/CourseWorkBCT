@@ -73,6 +73,9 @@ artifacts/
 # Chutzpah Test files
 _Chutzpah*
 
+#Visual C#
+Program.cs
+
 # Visual C++ cache files
 ipch/
 *.aps

@@ -24,6 +24,7 @@ namespace CourseWorkBCT.WordNote
         {
             explanatoryNoteTemplate = DocX.Load(AdressNoteTemplate);
 
+
             InsertValuesMessageSource(launcher.MessageSource);
 
             StopGeneration(outputFileName);

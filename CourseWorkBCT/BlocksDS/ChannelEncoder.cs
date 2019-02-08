@@ -30,12 +30,12 @@ namespace CourseWorkBCT.BlocksDS
             Initialization(sourceCoder);
         }
 
-        public double CalculationCodeRedundancy(int countTestBits, int countHemmingCodeBits)
+        public double CalculationCodeRedundancy(double countTestBits, double countHemmingCodeBits)
         {
             return (countTestBits / countHemmingCodeBits);
         }
 
-        public double CalculationCodeSpeed(int countInformationBits, int countHemmingCodeBits)
+        public double CalculationCodeSpeed(double countInformationBits, double countHemmingCodeBits)
         {
             return (countInformationBits / countHemmingCodeBits);
         }
@@ -80,6 +80,7 @@ namespace CourseWorkBCT.BlocksDS
             CodeCorrectingAbility = CalculationCorrectingCodeAbility(CodeDistance);
             AvegareCountEncoderBits = CalculationAverageCountEncoderBits(countInformationBits, CodeSpeed);
             AverageSpeedBits = CalculationAverageSpeedCode(sourceCoder.AverageSpeed, CodeSpeed);
+            
         }
 
         private void HemmingCodingMessage(string messageSourceCoder)

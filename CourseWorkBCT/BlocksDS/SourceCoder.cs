@@ -64,7 +64,7 @@ namespace CourseWorkBCT.BlocksDS
         {
             double averageCountBinaryCharacters = 0;
             for (int i = 0; i < baseAlphabet; i++)
-            {
+            {              
                 averageCountBinaryCharacters += 
                     Convert.ToDouble(ParametersEconomicalCodes[i][3]) * Convert.ToDouble(ParametersEconomicalCodes[i][1]);
             }
@@ -144,6 +144,7 @@ namespace CourseWorkBCT.BlocksDS
             LimitShennona = CalculationLimitShennona(messageSource.Entropy);
             AverageCountBinaryCharacters = CalculationAverageCountBinaryCharacters(messageSource.BaseAlphabet);
             AverageSpeed = CalculationAverageSpeed(messageSource.Speed, AverageCountBinaryCharacters);
+            
             ProbabilityZero = CalculationProbabilityZero(messageSource.BaseAlphabet);
             ProbabilityOne = CalculationProbabilityOne(messageSource.BaseAlphabet);
             Entropy = CalculationEntropy(ProbabilityZero, ProbabilityOne);
