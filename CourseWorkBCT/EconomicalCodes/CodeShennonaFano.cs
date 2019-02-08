@@ -20,7 +20,7 @@ namespace CourseWorkBCT.EconomicalCodes
 
             foreach(string key in tableCodes.Keys)
             {
-                Console.WriteLine(key + " : " + tableCodes[key]);
+                
             }
 
             return tableCodes;

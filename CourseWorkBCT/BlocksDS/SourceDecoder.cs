@@ -20,7 +20,7 @@ namespace CourseWorkBCT.BlocksDS
             Message = RestoreMessage(sourceCoder.EconomicalCodes, channelDecoder.Message);
             foreach(string sym in Message)
             {
-                Console.WriteLine(sym);
+                
             }
         }
 
@@ -32,7 +32,7 @@ namespace CourseWorkBCT.BlocksDS
 
             while (message.Length != 0)
             {
-                Console.WriteLine(message.Length);
+                
                 for(int i = 0; i < message.Length; i++)
                 {
                     if (economicalCodes.ContainsValue(message.Substring(0,i)))

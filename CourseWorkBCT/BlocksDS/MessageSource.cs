@@ -124,11 +124,13 @@ namespace CourseWorkBCT.BlocksDS
             Redundancy = CalculationRedundancy(Speed, Entropy);
             Efficiency = CalculationEfficiency(Entropy, EntropyMax);
 
+            SettingBaseAlphabet();
+
             Message = GenerationgMessage(ProbabilitiesCharacters.Keys.ToList());
 
             foreach(string sym in Message)
             {
-                Console.WriteLine(sym);
+                
             }
         }
 

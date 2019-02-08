@@ -8,8 +8,9 @@ namespace CourseWorkBCT.BlocksDS
     {
         public int TypeModulation { get; private set; }
 
-        public (double[] SignalCounts, double[] TimeCounts, double[] ModSignalCounts) VectorsPlotModulation;
-        public (double[] SpectrumCounts, double[] FrequencyCounts, double[] ModSignalCounts) VectorsPlotSpectrum;
+        public (double[] SignalCounts, double[] TimeCounts, double[] ModSignalCounts) vectorsPlotModulation; 
+        public (double[] SpectrumCounts, double[] FrequencyCounts, 
+            double[] ModFrequencyCounts, double[] ModSpectrumCounts) vectorsPlotSpectrum; 
 
         public double AmplitudeSignal { get; private set; }
         public double SpeedModulation { get; private set; }
@@ -25,6 +26,7 @@ namespace CourseWorkBCT.BlocksDS
         public double PeakFactor { get; private set; }
 
         public SourceCoder SourceCoder { get; private set; }
+        public ChannelEncoder ChannelEncoder { get; private set; }
 
         public Modulator(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
         {
@@ -106,15 +108,14 @@ namespace CourseWorkBCT.BlocksDS
 
         public int ChoiceTypeModulation(int[] variationCourseWork)
         {
-            return (variationCourseWork[1] * variationCourseWork[2] * variationCourseWork[3]) % 3;
+            return (variationCourseWork[1] + variationCourseWork[2] + variationCourseWork[3]) % 3;
         }
 
         private void Initialization(SourceCoder sourceCoder, ChannelEncoder channelEncoder)
         {
-            TypeModulation = ChoiceTypeModulation(sourceCoder.messageSource.VariationCourseWork);
-
-            AmplitudeSignal = CalculationAmplitudeSignal(sourceCoder.messageSource.VariationCourseWork);
-            SpeedModulation = CalculationSpeedModulation(channelEncoder.AverageSpeedBits);
+            TypeModulation = ChoiceTypeModulation(sourceCoder.messageSource.VariationCourseWork);           
+            AmplitudeSignal = CalculationAmplitudeSignal(sourceCoder.messageSource.VariationCourseWork);            
+            SpeedModulation = CalculationSpeedModulation(channelEncoder.AverageSpeedBits); 
             CarrierFrequency = CalculationCarrierFrequency(SpeedModulation);
             ClockInterval = CalculationClockInterval(SpeedModulation);
             DeviationFrequency = CalculationDeviationFrequeny(ClockInterval);
@@ -128,9 +129,11 @@ namespace CourseWorkBCT.BlocksDS
 
             PeakPower = CalculationPeakPower(ZeroTransferPower, OneTransferPower);
             PeakFactor = CalculationPeakFactor(AveragePower, PeakPower);
-
             MessageRange(MessagePreparation(string.Join("",channelEncoder.Message).ToCharArray()));
+            SourceCoder = sourceCoder;
+            ChannelEncoder = channelEncoder;
             Modulation();
+            Spectrum();
         }
 
         private int[] MessagePreparation(char[] message)
@@ -149,7 +152,55 @@ namespace CourseWorkBCT.BlocksDS
                 }
             }
 
-            return messageLocal;
+            return SearchLuckyRange(messageLocal);
+        }
+
+       private int[] SearchLuckyRange(int[] message)
+        {
+            byte countOne = 0;
+            byte countZero = 0;
+            int[] luckyRange = new int[6];
+
+            foreach (int i in message)
+            {
+                Console.Write(i + " | ");
+            }
+
+            Console.WriteLine();
+
+            for (int i = 0;i < message.Length; i++)
+            {
+                if(message[i] == 1)
+                {
+                    countOne++;
+                }
+                else
+                {
+                    countZero++;
+                }
+
+                if (countZero + countOne == 6)
+                {
+                    if(countZero != 0 && countOne != 0)
+                    {
+                        Array.Copy(message, i - 5, luckyRange, 0, 6);
+                        Console.WriteLine("Отрезок от " + Convert.ToString(i - 5) + " до " + Convert.ToString(i));
+                        break;
+                    }
+                    else
+                    {
+                        countOne = 0;
+                        countZero = 0;
+                    }
+                }
+            }
+            
+            foreach(int i in luckyRange)
+            {
+                Console.Write(i + " | ");
+            }
+
+            return luckyRange;
         }
 
         private void MessageRange(int[] message)
@@ -160,26 +211,26 @@ namespace CourseWorkBCT.BlocksDS
 
             int numberSamples = Convert.ToInt32(simulationInterval / 0.01);
 
-            VectorsPlotModulation.SignalCounts = new double[numberSamples];
-            VectorsPlotModulation.TimeCounts = new double[numberSamples];
+            vectorsPlotModulation.SignalCounts = new double[numberSamples];
+            vectorsPlotModulation.TimeCounts = new double[numberSamples];
 
             for(int i = 0;i < numberSamples;i++)
             {
                 double sum = 0;
-                VectorsPlotModulation.TimeCounts[i] = i * 0.01;
+                vectorsPlotModulation.TimeCounts[i] = i * 0.01;
                 
                 for (int j = 0;j < messageLength; j++)
                 {
-                    sum += message[j] * Impulse(j, pulseDuration, VectorsPlotModulation.TimeCounts[i]);
+                    sum += message[j] * Impulse(j, pulseDuration, vectorsPlotModulation.TimeCounts[i]);
                 }
 
-                VectorsPlotModulation.SignalCounts[i] = sum; 
+                vectorsPlotModulation.SignalCounts[i] = sum; 
             }
         }
 
         private double SignalAM(double countSignal, double countTime)
         {
-            return (AmplitudeSignal / 2) * (1 + countSignal) * Math.Cos(2 * Math.PI * CarrierFrequency * countTime);
+            return (AmplitudeSignal / 2.0) * (1 + countSignal) * Math.Cos(2 * Math.PI * CarrierFrequency * countTime);
         }
 
         private double SignalPM(double countSignal, double countTime)
@@ -189,12 +240,13 @@ namespace CourseWorkBCT.BlocksDS
 
         private double SignalFM(double countSignal, double countTime)
         {
-            double signal = (AmplitudeSignal / 2) * (1 - countSignal) * 
+            double signal = 0;
+            signal = (AmplitudeSignal / 2.0) * (1 - countSignal) * 
                 Math.Cos(2 * Math.PI * (CarrierFrequency - DeviationFrequency) * countTime);
-
-            signal += (AmplitudeSignal / 2) * (1 + countSignal) *
+            
+            signal += (AmplitudeSignal / 2.0) * (1 + countSignal) *
                 Math.Cos(2 * Math.PI * (CarrierFrequency + DeviationFrequency) * countTime);
-
+            
             return signal; 
         }
 
@@ -212,28 +264,71 @@ namespace CourseWorkBCT.BlocksDS
 
         private void Modulation()
         {
-            VectorsPlotModulation.ModSignalCounts = new double[VectorsPlotModulation.SignalCounts.Length];
-            Console.WriteLine(VectorsPlotModulation.SignalCounts.Length);
-            for(int i = 0;i < VectorsPlotModulation.SignalCounts.Length; i++)
+            vectorsPlotModulation.ModSignalCounts = new double[vectorsPlotModulation.SignalCounts.Length];
+            
+            for(int i = 0;i < vectorsPlotModulation.SignalCounts.Length; i++)
+            {                
+                vectorsPlotModulation.ModSignalCounts[i] = ModulationSelection(
+                    vectorsPlotModulation.SignalCounts[i], vectorsPlotModulation.TimeCounts[i]);
+                
+            }
+        }
+
+        private void Spectrum()
+        {
+            vectorsPlotSpectrum.FrequencyCounts = new double[(int)(CarrierFrequency * 2)];
+            vectorsPlotSpectrum.SpectrumCounts = new double[vectorsPlotSpectrum.FrequencyCounts.Length];
+
+            for (int i = 0;i < vectorsPlotSpectrum.FrequencyCounts.Length; i++)
             {
-                VectorsPlotModulation.ModSignalCounts[i] = ModulationSelection(
-                    VectorsPlotModulation.SignalCounts[i], VectorsPlotModulation.TimeCounts[i]);
+                vectorsPlotSpectrum.FrequencyCounts[i] = i - (vectorsPlotSpectrum.FrequencyCounts.Length / 2);
+                vectorsPlotSpectrum.SpectrumCounts[i] = G(vectorsPlotSpectrum.FrequencyCounts[i]);
+            }
+
+            vectorsPlotSpectrum.ModFrequencyCounts = new double[vectorsPlotSpectrum.FrequencyCounts.Length];
+            vectorsPlotSpectrum.ModSpectrumCounts = new double[vectorsPlotSpectrum.FrequencyCounts.Length];
+
+            for (int i = 1; i < vectorsPlotSpectrum.ModFrequencyCounts.Length; i++)
+            {
+                vectorsPlotSpectrum.ModFrequencyCounts[i] = i;
+                vectorsPlotSpectrum.ModSpectrumCounts[i] = SpectrumSelection(vectorsPlotSpectrum.ModFrequencyCounts[i]);
             }
         }
 
         private double ModulationSelection(double countSignal, double countTime)
         {
+            double modCount = 0;
+
             switch (TypeModulation)
             {
                 case 0:
-                    return SignalPM(countSignal, countTime);
+                    modCount = SignalPM(countSignal, countTime);
+                    break;
                 case 1:
-                    return SignalFM(countSignal, countTime);
+                    modCount = SignalFM(countSignal, countTime);
+                    break;
                 case 2:
-                    return SignalAM(countSignal, countTime);
+                    modCount = SignalAM(countSignal, countTime);
+                    break;
             }
 
-            return 0;
+            return modCount;
+        }
+
+        private double SpectrumSelection(double frequency)
+        {
+            double spectrumCount = 0;
+
+            if(TypeModulation == 0 || TypeModulation == 2)
+            {
+                spectrumCount = SpectrumAMFM(frequency);
+            }
+            else
+            {
+                spectrumCount = SpectrumCHM(frequency);
+            }
+
+            return spectrumCount;
         }
 
         private Func<double,double,double> ModulationSelection()
